@@ -14,6 +14,7 @@ const App: React.FC = () => {
   const gameTimerRef = useRef<NodeJS.Timeout | null>(null);
   const bombTimerRef = useRef<NodeJS.Timeout | null>(null);
   const lifeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const boardRef = useRef<(string | null)[][]>([]);
 
   // Life regeneration
   useEffect(() => {
@@ -63,6 +64,7 @@ const App: React.FC = () => {
 
     const config = LEVEL_CONFIGS[level - 1];
     const board = initializeBoard(config);
+    boardRef.current = board; // Update ref
 
     setGameState(prev => ({
       ...prev,
@@ -106,8 +108,8 @@ const App: React.FC = () => {
       setBombTimeLeft(prev => {
         if (prev === null) return null;
         if (prev <= 1) {
-          // Check if bombs still on board
-          if (checkForBombs(gameState.board)) {
+          // Check if bombs still on board using ref
+          if (checkForBombs(boardRef.current)) {
             loseLevel('Bombs exploded!');
           }
           return null;
@@ -145,6 +147,7 @@ const App: React.FC = () => {
     const newBoard = gameState.board.map(row => [...row]);
     newBoard[toRow][toCol] = item;
     newBoard[fromRow][fromCol] = targetItem;
+    boardRef.current = newBoard; // Update ref
 
     // Count move only if moving between rows
     const newMoves = fromRow !== toRow && gameState.movesRemaining !== null
@@ -174,6 +177,7 @@ const App: React.FC = () => {
         const [row, col] = pos.split(',').map(Number);
         newBoard[row][col] = null;
       });
+      boardRef.current = newBoard; // Update ref
 
       setGameState(prev => ({
         ...prev,

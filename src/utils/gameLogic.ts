@@ -106,27 +106,18 @@ const hasMatch = (board: (string | null)[][], row: number, col: number): boolean
 export const checkMatches = (board: (string | null)[][]): Set<string> => {
   const matchedPositions = new Set<string>();
   
-  // Check all positions for matches
-  for (let row = 0; row < GAME_CONSTANTS.ROWS; row++) {
-    for (let col = 0; col < GAME_CONSTANTS.COLS; col++) {
+  // Check vertical matches (only possible with 2 columns)
+  for (let col = 0; col < GAME_CONSTANTS.COLS; col++) {
+    for (let row = 0; row < GAME_CONSTANTS.ROWS; row++) {
       const item = board[row][col];
       if (!item || item === GAME_CONSTANTS.BOMB_ITEM) continue;
       
-      // Horizontal match
-      if (col === 0) {
+      // Check if this starts a vertical match
+      if (row <= GAME_CONSTANTS.ROWS - 3) { // Need at least 3 rows remaining
         let count = 1;
-        for (let c = col + 1; c < GAME_CONSTANTS.COLS && board[row][c] === item; c++) count++;
-        if (count >= 3) {
-          for (let c = col; c < col + count; c++) {
-            matchedPositions.add(`${row},${c}`);
-          }
+        for (let r = row + 1; r < GAME_CONSTANTS.ROWS && board[r][col] === item; r++) {
+          count++;
         }
-      }
-      
-      // Vertical match
-      if (row === 0) {
-        let count = 1;
-        for (let r = row + 1; r < GAME_CONSTANTS.ROWS && board[r][col] === item; r++) count++;
         if (count >= 3) {
           for (let r = row; r < row + count; r++) {
             matchedPositions.add(`${r},${col}`);
