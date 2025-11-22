@@ -58,8 +58,27 @@ const levelConfigs = [
 function initGame() {
     loadGameState();
     startLifeRegeneration();
+    setupEventDelegation();
     updateAllStats();
     showMainMenu();
+}
+
+// Setup event delegation for game board
+function setupEventDelegation() {
+    const board = document.getElementById('game-board');
+    board.addEventListener('touchstart', (e) => {
+        const item = e.target.closest('.game-item');
+        if (item) {
+            handleDragStart(e);
+        }
+    }, { passive: false });
+    
+    board.addEventListener('mousedown', (e) => {
+        const item = e.target.closest('.game-item');
+        if (item) {
+            handleDragStart(e);
+        }
+    });
 }
 
 // Screen Management
@@ -278,10 +297,6 @@ function renderBoard() {
                 itemDiv.setAttribute('data-item', item);
                 itemDiv.setAttribute('data-row', row);
                 itemDiv.setAttribute('data-col', col);
-                
-                // Add touch/mouse events
-                itemDiv.addEventListener('touchstart', handleDragStart, { passive: false });
-                itemDiv.addEventListener('mousedown', handleDragStart);
                 
                 slot.appendChild(itemDiv);
             }
@@ -685,24 +700,34 @@ function updateAllStats() {
 
 // Save/Load
 function saveGameState() {
-    localStorage.setItem('goodGoodsGame', JSON.stringify({
-        lives: gameState.lives,
-        coins: gameState.coins,
-        unlockedLevels: gameState.unlockedLevels,
-        completedLevels: gameState.completedLevels,
-        lastLifeTime: gameState.lastLifeTime
-    }));
+    try {
+        localStorage.setItem('goodGoodsGame', JSON.stringify({
+            lives: gameState.lives,
+            coins: gameState.coins,
+            unlockedLevels: gameState.unlockedLevels,
+            completedLevels: gameState.completedLevels,
+            lastLifeTime: gameState.lastLifeTime
+        }));
+    } catch (e) {
+        console.error('Failed to save game state:', e);
+        // Continue without saving - game will still work
+    }
 }
 
 function loadGameState() {
-    const saved = localStorage.getItem('goodGoodsGame');
-    if (saved) {
-        const data = JSON.parse(saved);
-        gameState.lives = data.lives || GAME_CONSTANTS.INITIAL_LIVES;
-        gameState.coins = data.coins || GAME_CONSTANTS.INITIAL_COINS;
-        gameState.unlockedLevels = data.unlockedLevels || [1];
-        gameState.completedLevels = data.completedLevels || [];
-        gameState.lastLifeTime = data.lastLifeTime || Date.now();
+    try {
+        const saved = localStorage.getItem('goodGoodsGame');
+        if (saved) {
+            const data = JSON.parse(saved);
+            gameState.lives = data.lives || GAME_CONSTANTS.INITIAL_LIVES;
+            gameState.coins = data.coins || GAME_CONSTANTS.INITIAL_COINS;
+            gameState.unlockedLevels = data.unlockedLevels || [1];
+            gameState.completedLevels = data.completedLevels || [];
+            gameState.lastLifeTime = data.lastLifeTime || Date.now();
+        }
+    } catch (e) {
+        console.error('Failed to load game state:', e);
+        // Use default values if load fails
     }
 }
 
