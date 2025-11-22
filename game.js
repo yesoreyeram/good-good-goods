@@ -414,7 +414,6 @@ function handleDrop(toRow, toCol) {
 }
 
 function checkMatches() {
-    const matches = [];
     const matchedPositions = new Set();
     
     // Find all matches
@@ -424,7 +423,7 @@ function checkMatches() {
             if (!item || item === '💣') continue;
             
             // Horizontal match
-            if (col <= 0) {
+            if (col === 0) {
                 let count = 1;
                 for (let c = col + 1; c < 3 && gameState.board[row][c] === item; c++) count++;
                 if (count >= 3) {
@@ -435,7 +434,7 @@ function checkMatches() {
             }
             
             // Vertical match
-            if (row <= 0) {
+            if (row === 0) {
                 let count = 1;
                 for (let r = row + 1; r < 3 && gameState.board[r][col] === item; r++) count++;
                 if (count >= 3) {
@@ -565,7 +564,7 @@ function resumeGame() {
     if (gameState.timeRemaining !== null) {
         startGameTimer();
     }
-    if (config.advanced === 'bomb' && gameState.bombTimer) {
+    if (config.advanced === 'bomb') {
         startBombTimer();
     }
 }
