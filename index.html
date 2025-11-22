@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Good Good Goods - Sorting Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Main Menu Screen -->
+        <div id="main-menu" class="screen active">
+            <div class="menu-content">
+                <h1 class="game-title">GOOD GOOD GOODS</h1>
+                <div class="stats-display">
+                    <div class="stat-item">
+                        <span class="stat-icon">❤️</span>
+                        <span id="lives-display">10</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">💰</span>
+                        <span id="coins-display">1000</span>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="showLevelMap()">PLAY</button>
+            </div>
+        </div>
+
+        <!-- Level Map Screen -->
+        <div id="level-map" class="screen">
+            <div class="map-header">
+                <button class="btn-back" onclick="showMainMenu()">← BACK</button>
+                <h2>SELECT LEVEL</h2>
+                <div class="stats-small">
+                    <span>❤️ <span id="lives-map">10</span></span>
+                    <span>💰 <span id="coins-map">1000</span></span>
+                </div>
+            </div>
+            <div class="level-grid" id="level-grid"></div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <button class="btn-back" onclick="pauseGame()">⏸</button>
+                <div class="level-info">
+                    <span>Level <span id="current-level">1</span></span>
+                </div>
+                <div class="game-stats">
+                    <span id="constraint-display"></span>
+                    <span>❤️ <span id="lives-game">10</span></span>
+                </div>
+            </div>
+            
+            <div id="game-board" class="game-board">
+                <div class="shelf-row" data-row="0">
+                    <div class="shelf-slot" data-row="0" data-col="0"></div>
+                    <div class="shelf-slot" data-row="0" data-col="1"></div>
+                    <div class="shelf-slot" data-row="0" data-col="2"></div>
+                </div>
+                <div class="shelf-row" data-row="1">
+                    <div class="shelf-slot" data-row="1" data-col="0"></div>
+                    <div class="shelf-slot" data-row="1" data-col="1"></div>
+                    <div class="shelf-slot" data-row="1" data-col="2"></div>
+                </div>
+                <div class="shelf-row" data-row="2">
+                    <div class="shelf-slot" data-row="2" data-col="0"></div>
+                    <div class="shelf-slot" data-row="2" data-col="1"></div>
+                    <div class="shelf-slot" data-row="2" data-col="2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pause Screen -->
+        <div id="pause-screen" class="screen overlay">
+            <div class="dialog">
+                <h2>PAUSED</h2>
+                <button class="btn-primary" onclick="resumeGame()">RESUME</button>
+                <button class="btn-secondary" onclick="quitToMenu()">QUIT</button>
+            </div>
+        </div>
+
+        <!-- Win Screen -->
+        <div id="win-screen" class="screen overlay">
+            <div class="dialog">
+                <h2>LEVEL COMPLETE!</h2>
+                <div class="result-stats" id="win-stats"></div>
+                <button class="btn-primary" onclick="nextLevel()">NEXT LEVEL</button>
+                <button class="btn-secondary" onclick="quitToMenu()">MENU</button>
+            </div>
+        </div>
+
+        <!-- Lose Screen -->
+        <div id="lose-screen" class="screen overlay">
+            <div class="dialog">
+                <h2>LEVEL FAILED</h2>
+                <div class="result-stats" id="lose-stats"></div>
+                <button class="btn-primary" onclick="retryLevel()">RETRY</button>
+                <button class="btn-secondary" onclick="quitToMenu()">MENU</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
