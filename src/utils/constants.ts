@@ -10,7 +10,7 @@ export const GAME_CONSTANTS: GameConstants = {
   SECRET_UNLOCK_CLICKS: 5,
   ROWS: 4,
   COLS: 2,
-  TOTAL_SLOTS: 8,
+  get TOTAL_SLOTS() { return this.ROWS * this.COLS; },
   EMPTY_SLOTS: 3,
 };
 

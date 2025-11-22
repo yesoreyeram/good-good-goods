@@ -106,7 +106,8 @@ const hasMatch = (board: (string | null)[][], row: number, col: number): boolean
 export const checkMatches = (board: (string | null)[][]): Set<string> => {
   const matchedPositions = new Set<string>();
   
-  // Check vertical matches (only possible with 2 columns)
+  // Note: With a 2-column board, horizontal matches are impossible (need 3 in a row)
+  // Only check vertical matches (3 or more items in the same column)
   for (let col = 0; col < GAME_CONSTANTS.COLS; col++) {
     for (let row = 0; row < GAME_CONSTANTS.ROWS; row++) {
       const item = board[row][col];
