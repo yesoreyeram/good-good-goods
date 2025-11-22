@@ -125,7 +125,7 @@ function handleLevelClick(level) {
 // Level Management
 function startLevel(level) {
     if (gameState.lives <= 0) {
-        alert('Not enough lives! Wait for regeneration.');
+        showNotification('Not enough lives! Wait for regeneration.');
         return;
     }
     
@@ -525,10 +525,14 @@ function winLevel() {
     
     saveGameState();
     
-    document.getElementById('win-stats').innerHTML = `
-        <p>Level ${gameState.currentLevel} Complete!</p>
-        <p>Great job!</p>
-    `;
+    const winStats = document.getElementById('win-stats');
+    winStats.textContent = '';
+    const levelP = document.createElement('p');
+    levelP.textContent = `Level ${gameState.currentLevel} Complete!`;
+    const jobP = document.createElement('p');
+    jobP.textContent = 'Great job!';
+    winStats.appendChild(levelP);
+    winStats.appendChild(jobP);
     
     showScreen('win-screen');
 }
@@ -539,10 +543,14 @@ function loseLevel(reason) {
     saveGameState();
     updateAllStats();
     
-    document.getElementById('lose-stats').innerHTML = `
-        <p>${reason}</p>
-        <p>Lives remaining: ${gameState.lives}</p>
-    `;
+    const loseStats = document.getElementById('lose-stats');
+    loseStats.textContent = '';
+    const reasonP = document.createElement('p');
+    reasonP.textContent = reason;
+    const livesP = document.createElement('p');
+    livesP.textContent = `Lives remaining: ${gameState.lives}`;
+    loseStats.appendChild(reasonP);
+    loseStats.appendChild(livesP);
     
     showScreen('lose-screen');
 }
@@ -696,6 +704,17 @@ function loadGameState() {
         gameState.completedLevels = data.completedLevels || [];
         gameState.lastLifeTime = data.lastLifeTime || Date.now();
     }
+}
+
+// Notification System
+function showNotification(message) {
+    const toast = document.getElementById('notification-toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
 }
 
 // Initialize on load
