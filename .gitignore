@@ -2,6 +2,10 @@
 test_*.js
 *.log
 
+# Dependencies
+node_modules/
+dist/
+
 # Editor
 .vscode/
 .idea/
@@ -9,3 +13,9 @@ test_*.js
 # OS
 .DS_Store
 Thumbs.db
+
+# Build artifacts
+*.tsbuildinfo
+
+# Old files
+*.old
