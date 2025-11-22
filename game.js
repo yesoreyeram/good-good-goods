@@ -1,7 +1,18 @@
+// Game Constants
+const GAME_CONSTANTS = {
+    INITIAL_LIVES: 10,
+    MAX_LIVES: 10,
+    INITIAL_COINS: 1000,
+    LIFE_REGEN_TIME_MS: 5 * 60 * 1000, // 5 minutes
+    BOMB_ITEM: '💣',
+    BOMB_COUNTDOWN_SECONDS: 12,
+    SECRET_UNLOCK_CLICKS: 5
+};
+
 // Game State
 const gameState = {
-    lives: 10,
-    coins: 1000,
+    lives: GAME_CONSTANTS.INITIAL_LIVES,
+    coins: GAME_CONSTANTS.INITIAL_COINS,
     currentLevel: 1,
     unlockedLevels: [1],
     completedLevels: [],
@@ -102,7 +113,7 @@ function handleLevelClick(level) {
         }
         gameState.clickCounts[level]++;
         
-        if (gameState.clickCounts[level] >= 5) {
+        if (gameState.clickCounts[level] >= GAME_CONSTANTS.SECRET_UNLOCK_CLICKS) {
             gameState.unlockedLevels.push(level);
             gameState.clickCounts[level] = 0;
             saveGameState();
@@ -171,7 +182,7 @@ function initializeBoard(config) {
     // Add bombs if needed
     const bombCount = config.advanced === 'bomb' ? 3 : 0;
     for (let i = 0; i < bombCount; i++) {
-        items.push('💣');
+        items.push(GAME_CONSTANTS.BOMB_ITEM);
     }
     
     // Fill remaining with random items (ensure no initial matches)
@@ -224,7 +235,7 @@ function removeInitialMatches() {
 
 function hasMatch(row, col) {
     const item = gameState.board[row][col];
-    if (!item || item === '💣') return false;
+    if (!item || item === GAME_CONSTANTS.BOMB_ITEM) return false;
     
     // Check horizontal
     let count = 1;
@@ -260,7 +271,7 @@ function renderBoard() {
             } else {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'game-item';
-                if (item === '💣') {
+                if (item === GAME_CONSTANTS.BOMB_ITEM) {
                     itemDiv.classList.add('bomb');
                 }
                 itemDiv.textContent = item;
@@ -420,7 +431,7 @@ function checkMatches() {
     for (let row = 0; row < 3; row++) {
         for (let col = 0; col < 3; col++) {
             const item = gameState.board[row][col];
-            if (!item || item === '💣') continue;
+            if (!item || item === GAME_CONSTANTS.BOMB_ITEM) continue;
             
             // Horizontal match
             if (col === 0) {
@@ -595,7 +606,7 @@ function stopGameTimer() {
 }
 
 function startBombTimer() {
-    let bombTime = 12;
+    let bombTime = GAME_CONSTANTS.BOMB_COUNTDOWN_SECONDS;
     gameState.bombTimer = setInterval(() => {
         bombTime--;
         
@@ -604,7 +615,7 @@ function startBombTimer() {
             let hasBombs = false;
             for (let row = 0; row < 3; row++) {
                 for (let col = 0; col < 3; col++) {
-                    if (gameState.board[row][col] === '💣') {
+                    if (gameState.board[row][col] === GAME_CONSTANTS.BOMB_ITEM) {
                         hasBombs = true;
                         break;
                     }
@@ -632,7 +643,7 @@ function startLifeRegeneration() {
         const now = Date.now();
         const elapsed = now - gameState.lastLifeTime;
         
-        if (elapsed >= 5 * 60 * 1000 && gameState.lives < 10) {
+        if (elapsed >= GAME_CONSTANTS.LIFE_REGEN_TIME_MS && gameState.lives < GAME_CONSTANTS.MAX_LIVES) {
             gameState.lives++;
             gameState.lastLifeTime = now;
             saveGameState();
@@ -679,8 +690,8 @@ function loadGameState() {
     const saved = localStorage.getItem('goodGoodsGame');
     if (saved) {
         const data = JSON.parse(saved);
-        gameState.lives = data.lives || 10;
-        gameState.coins = data.coins || 1000;
+        gameState.lives = data.lives || GAME_CONSTANTS.INITIAL_LIVES;
+        gameState.coins = data.coins || GAME_CONSTANTS.INITIAL_COINS;
         gameState.unlockedLevels = data.unlockedLevels || [1];
         gameState.completedLevels = data.completedLevels || [];
         gameState.lastLifeTime = data.lastLifeTime || Date.now();
