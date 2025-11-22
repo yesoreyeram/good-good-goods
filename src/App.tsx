@@ -383,15 +383,15 @@ const App: React.FC = () => {
         )}
 
         {/* Game Board - 4 rows x 2 cols */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-3 p-4">
+        <div className="flex-1 flex flex-col items-center justify-center gap-4 p-6">
           {gameState.board.map((row, rowIndex) => (
-            <div key={rowIndex} className="flex gap-3 bg-amber-700 rounded-2xl p-3 shadow-lg">
+            <div key={rowIndex} className="flex gap-4 bg-amber-700 rounded-3xl p-4 shadow-lg w-full max-w-2xl">
               {row.map((item, colIndex) => (
                 <div
                   key={colIndex}
                   className={`
-                    w-24 h-24 md:w-32 md:h-32 rounded-xl flex items-center justify-center text-5xl
-                    ${item === null ? 'bg-amber-900/30 border-2 border-dashed border-amber-600/50' : 'bg-white shadow-md cursor-grab'}
+                    flex-1 aspect-square rounded-2xl flex items-center justify-center text-7xl sm:text-8xl md:text-9xl
+                    ${item === null ? 'bg-amber-900/30 border-4 border-dashed border-amber-600/50' : 'bg-white shadow-md cursor-grab'}
                   `}
                   onTouchStart={() => {
                     if (item) {
